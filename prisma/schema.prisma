@@ -13,3 +13,75 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  firstName   String
+  lastName    String
+  militaryId  String?  @unique
+  rank        String?
+  unit        String?
+  salary      Decimal? @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  documents   Document[]
+  auditLogs   AuditLog[]
+  
+  @@map("users")
+}
+
+model Document {
+  id              String        @id @default(cuid())
+  userId          String
+  type            DocumentType
+  status          DocumentStatus @default(DRAFT)
+  originalFile    String?
+  processedFile   String?
+  recipientEmail  String
+  recipientName   String
+  purpose         String
+  metadata        Json?
+  eSealReference  String?
+  eSealAppliedAt  DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  user            User          @relation(fields: [userId], references: [id])
+  auditLogs       AuditLog[]
+  
+  @@map("documents")
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  documentId  String?
+  action      String
+  details     Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+  
+  user        User?     @relation(fields: [userId], references: [id])
+  document    Document? @relation(fields: [documentId], references: [id])
+  
+  @@map("audit_logs")
+}
+
+enum DocumentType {
+  SALARY_CERTIFICATE
+  LEAVE_CERTIFICATE
+  NOC_CERTIFICATE
+}
+
+enum DocumentStatus {
+  DRAFT
+  SUBMITTED
+  PROCESSING
+  ESEAL_APPLIED
+  COMPLETED
+  FAILED
+}

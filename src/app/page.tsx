@@ -1,103 +1,159 @@
-import Image from "next/image";
+// src/app/page.tsx - Landing page
+'use client'
 
-export default function Home() {
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Shield, FileText, Lock, CheckCircle } from 'lucide-react'
+import Link from 'next/link'
+
+export default function HomePage() {
+  const { user, loading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard')
+    }
+  }, [user, loading, router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Shield className="h-8 w-8 text-blue-600" />
+            <span className="text-xl font-bold">UAE eSeal System</span>
+          </div>
+          <div className="space-x-4">
+            <Link href="/login">
+              <Button variant="outline">Sign In</Button>
+            </Link>
+            <Link href="/register">
+              <Button>Get Started</Button>
+            </Link>
+          </div>
         </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="container mx-auto px-4 py-16">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            Secure Military Document
+            <span className="text-blue-600"> eSeal System</span>
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Generate, seal, and distribute official military documents with UAE Pass digital signatures. 
+            Streamlined, secure, and compliant with government standards.
+          </p>
+          <div className="space-x-4">
+            <Link href="/register">
+              <Button size="lg" className="px-8 py-3">
+                Start Your Application
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button variant="outline" size="lg" className="px-8 py-3">
+                Sign In
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <Card>
+            <CardHeader>
+              <Shield className="h-12 w-12 text-blue-600 mb-4" />
+              <CardTitle>UAE Pass Integration</CardTitle>
+              <CardDescription>
+                Secure authentication and digital sealing powered by UAE Pass technology
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <FileText className="h-12 w-12 text-green-600 mb-4" />
+              <CardTitle>Document Management</CardTitle>
+              <CardDescription>
+                Generate salary certificates, NOCs, and other official documents instantly
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Lock className="h-12 w-12 text-purple-600 mb-4" />
+              <CardTitle>Tamper-Proof Sealing</CardTitle>
+              <CardDescription>
+                Digital signatures that ensure document authenticity and prevent fraud
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+
+        {/* Benefits */}
+        <Card className="max-w-4xl mx-auto">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Why Choose Our eSeal System?</CardTitle>
+            <CardDescription>
+              Built specifically for UAE military personnel and administrative efficiency
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="h-6 w-6 text-green-600 mt-1" />
+                <div>
+                  <h3 className="font-semibold">Instant Processing</h3>
+                  <p className="text-gray-600">Generate documents in minutes, not days</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="h-6 w-6 text-green-600 mt-1" />
+                <div>
+                  <h3 className="font-semibold">Government Compliant</h3>
+                  <p className="text-gray-600">Meets all UAE government security standards</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="h-6 w-6 text-green-600 mt-1" />
+                <div>
+                  <h3 className="font-semibold">Audit Trail</h3>
+                  <p className="text-gray-600">Complete tracking of all document activities</p>
+                </div>
+              </div>
+              <div className="flex items-start space-x-3">
+                <CheckCircle className="h-6 w-6 text-green-600 mt-1" />
+                <div>
+                  <h3 className="font-semibold">24/7 Availability</h3>
+                  <p className="text-gray-600">Access your documents anytime, anywhere</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="border-t bg-white/80 backdrop-blur-sm mt-16">
+        <div className="container mx-auto px-4 py-8 text-center text-gray-600">
+          <p>&copy; 2024 UAE Armed Forces - eSeal Document System. All rights reserved.</p>
+        </div>
       </footer>
     </div>
-  );
+  )
 }

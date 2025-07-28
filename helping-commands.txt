@@ -1,0 +1,46 @@
+# First time add to git
+git add .
+git commit -m "First commit for project defination"
+git remote add origin https://github.com/kakamana/capstone-eseal
+git push -u origin main
+
+# To find current branch
+git branch
+
+# To push to master branch or main brainch
+git push origin main
+OR
+git push origin main
+
+# To rename your branch to main
+git branch -M main
+git push origin mian
+
+# Sometime it wont allow as branch where to push isn't same so have to pull First
+git pull origin main
+
+# Creat new / initate empty git repo in local machine with git bash in vscode
+git init
+
+# see status & branch name 
+git status
+
+# Stage all files
+git add .
+
+# inital commit to local machine repo
+git commit -m "Initial project commit"
+
+# Mostly older verison of git use master as default branch name,
+# but we need to change to main to link with vercel or deployment autoamtion for CI / CD release
+git branch -m master main
+
+# To run for development
+npm run dev
+
+# 2. Update your Prisma schema and generate client
+npx prisma db push
+npx prisma generate
+
+# 3. Create a demo user for testing
+npx prisma studio # will open http://localhost:5555/
